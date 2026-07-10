@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Twibbon Generator</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+      :root {
+        --green: #05843d;
+        --green-dark: #004d2a;
+        --lime: #7cc80b;
+        --ink: #14202a;
+        --muted: #61707e;
+        --line: #e2e9e5;
+        --page: #f5f8f6;
+        --card: #fff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family:
+          Poppins,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      .topbar {
+        min-height: 100px;
+        padding: 20px max(34px, calc((100vw - 1500px) / 2));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #fff;
+        background: linear-gradient(115deg, #00542d, #006c38 55%, #004a29);
+        position: relative;
+        overflow: hidden;
+      }
+      .topbar:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          125deg,
+          transparent 0 10px,
+          rgba(255, 255, 255, 0.025) 11px 13px
+        );
+        pointer-events: none;
+      }
+      .brand,
+      .top-actions {
+        z-index: 1;
+        display: flex;
+        align-items: center;
+      }
+      .brand {
+        gap: 15px;
+      }
+      .brand-icon {
+        width: 54px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #8bd916;
+        border-radius: 13px;
+        box-shadow: inset 0 0 0 6px rgba(139, 217, 22, 0.12);
+        font-size: 29px;
+      }
+      .brand h1 {
+        margin: 0;
+        font-size: 27px;
+        letter-spacing: 0.2px;
+      }
+      .brand h1 span {
+        color: #85d31d;
+      }
+      .brand p {
+        margin: 3px 0 0;
+        font-size: 14px;
+      }
+      .top-actions {
+        gap: 16px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 9px;
+        padding: 14px 20px;
+        font: 700 15px inherit;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.96);
+      }
+      .guide {
+        color: #fff;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.65);
+      }
+      .download {
+        color: #08743a;
+        background: #fff;
+        min-width: 182px;
+      }
+      .layout {
+        max-width: 1500px;
+        margin: 25px auto;
+        padding: 0 34px;
+        display: grid;
+        grid-template-columns: 405px minmax(520px, 1fr) 345px;
+        gap: 24px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(28, 61, 43, 0.08);
+        border: 1px solid #edf1ee;
+      }
+      .left-card {
+        padding: 28px;
+      }
+      .section-title {
+        margin: 0 0 19px;
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .rule {
+        height: 1px;
+        background: #e8eeea;
+        margin: 29px 0;
+      }
+      .dropzone {
+        min-height: 263px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        border: 2px dashed #cbd7d0;
+        border-radius: 10px;
+        background: #fcfdfc;
+        cursor: pointer;
+        padding: 20px;
+      }
+      .dropzone.drag {
+        border-color: var(--green);
+        background: #f1fff6;
+      }
+      .upload-icon {
+        font-size: 47px;
+        line-height: 1;
+        color: #60717a;
+      }
+      .dropzone strong {
+        display: block;
+        margin-top: 15px;
+        font-size: 16px;
+      }
+      .dropzone span,
+      .dropzone small {
+        display: block;
+        color: #596978;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .choose {
+        margin-top: 22px;
+        padding: 12px 23px;
+        color: #fff;
+        background: #099247;
+      }
+      .dropzone small {
+        font-size: 12px;
+        margin-top: 17px;
+      }
+      .control-label {
+        display: flex;
+        justify-content: space-between;
+        margin: 23px 0 12px;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .slider-row {
+        display: grid;
+        grid-template-columns: 32px 1fr 43px;
+        gap: 12px;
+        align-items: center;
+      }
+      .round-icon {
+        display: grid;
+        place-items: center;
+        color: #526773;
+        font-size: 25px;
+      }
+      .range {
+        appearance: none;
+        width: 100%;
+        height: 7px;
+        border-radius: 20px;
+        background: linear-gradient(
+          to right,
+          var(--green) 0 var(--value),
+          #dfe5e2 var(--value) 100%
+        );
+        outline: none;
+      }
+      .range::-webkit-slider-thumb {
+        appearance: none;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #c8d2cd;
+        box-shadow: 0 1px 3px #aebbb4;
+      }
+      .value {
+        text-align: right;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .reset {
+        width: 100%;
+        margin-top: 28px;
+        padding: 15px;
+        color: #087d3b;
+        border: 1px solid #cce7d6;
+        border-radius: 9px;
+        background: #f8fdf9;
+        font: 700 14px inherit;
+        cursor: pointer;
+      }
+      .tips {
+        margin-top: 13px;
+        padding: 16px;
+        background: #f5fbf7;
+        border: 1px solid #d6ebdc;
+        border-radius: 10px;
+        display: flex;
+        gap: 12px;
+        color: #58716a;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .tips b {
+        display: block;
+        color: #08813e;
+        margin-bottom: 3px;
+      }
+      .preview-card {
+        padding: 25px;
+      }
+      .preview-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .preview-head h2 {
+        margin: 0;
+        color: #07823e;
+        font-size: 17px;
+      }
+      .devices {
+        display: flex;
+        gap: 10px;
+      }
+      .device {
+        width: 47px;
+        height: 42px;
+        border: 1px solid #dce5df;
+        border-radius: 8px;
+        background: #fff;
+        color: #62717b;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .device.active {
+        border-color: #079247;
+        color: #07853f;
+        background: #f5fff7;
+      }
+      .canvas-wrap {
+        display: grid;
+        place-items: center;
+        background: #073f24;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      canvas {
+        width: min(100%, 614px);
+        max-height: 654px;
+        object-fit: contain;
+        display: block;
+        touch-action: none;
+      }
+      .preview-bottom {
+        padding-top: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .preview-bottom .download {
+        width: 100%;
+        color: #fff;
+        background: var(--green);
+        font-family: Poppins, ui-sans-serif, sans-serif;
+        font-weight: 700;
+      }
+      .bottom-zoom {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+      }
+      .mini {
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 8px;
+        background: #f7f9f8;
+        color: #61717c;
+        font-size: 21px;
+        cursor: pointer;
+      }
+      .zoom-display {
+        min-width: 103px;
+        padding: 11px;
+        text-align: center;
+        border: 1px solid #e2e8e4;
+        border-radius: 7px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .fit {
+        padding: 11px 17px;
+        border: 1px solid #dfe7e2;
+        border-radius: 8px;
+        background: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .right-col {
+        display: grid;
+        gap: 21px;
+        align-content: start;
+      }
+      .right-card {
+        padding: 27px 24px;
+      }
+      .quick-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+      }
+      .quick {
+        min-height: 103px;
+        border: 1px solid #e0e7e3;
+        border-radius: 9px;
+        background: #fff;
+        font: 500 14px inherit;
+        cursor: pointer;
+      }
+      .quick span {
+        display: block;
+        color: #058a43;
+        font-size: 37px;
+        line-height: 1;
+        margin-bottom: 12px;
+      }
+      .quick.wide {
+        grid-column: 1/-1;
+        min-height: 67px;
+      }
+      .quick.wide span {
+        display: inline;
+        margin: 0 9px 0 0;
+        font-size: 29px;
+        vertical-align: middle;
+      }
+      .export-item {
+        display: flex;
+        gap: 13px;
+        margin: 16px 0;
+        color: #5e6c78;
+        font-size: 14px;
+      }
+      .export-icon {
+        width: 38px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        color: #06833f;
+        background: #f1faf4;
+        border: 1px solid #d9eee0;
+        border-radius: 8px;
+        font-size: 20px;
+      }
+      .export-item b {
+        display: block;
+        color: #17232b;
+        margin-top: 2px;
+      }
+      .assurance {
+        max-width: 1500px;
+        margin: 0 auto 24px;
+        padding: 14px 34px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        border: 1px solid #dceee2;
+        border-radius: 12px;
+        background: #f8fdf9;
+      }
+      .assure {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 12px;
+        color: #5f6e76;
+      }
+      .assure i {
+        font-size: 27px;
+        color: #058a43;
+        font-style: normal;
+      }
+      .assure b {
+        display: block;
+        color: #20302b;
+        margin-bottom: 3px;
+      }
+      @media (max-width: 1100px) {
+        .layout {
+          grid-template-columns: 340px 1fr;
+        }
+        .right-col {
+          grid-column: 1/-1;
+          grid-template-columns: 1fr 1fr;
+        }
+        .right-card {
+          min-height: auto;
+        }
+        .assurance {
+          margin: 0 20px 24px;
+        }
+        .topbar {
+          padding-inline: 20px;
+        }
+      }
+      @media (max-width: 760px) {
+        .topbar {
+          padding: 15px 18px;
+        }
+        .brand-icon {
+          width: 43px;
+          height: 43px;
+          font-size: 23px;
+        }
+        .brand h1 {
+          font-size: 19px;
+        }
+        .brand p {
+          font-size: 11px;
+        }
+        .guide {
+          display: none;
+        }
+        .download {
+          min-width: auto;
+          padding: 12px;
+        }
+        .layout {
+          display: block;
+          padding: 0 15px;
+          margin: 15px auto;
+        }
+        .card {
+          margin-bottom: 15px;
+        }
+        .left-card,
+        .preview-card {
+          padding: 19px;
+        }
+        .right-col {
+          display: block;
+        }
+        .right-card {
+          margin-bottom: 15px;
+        }
+        .assurance {
+          margin: 0 15px 15px;
+          padding: 14px;
+          grid-template-columns: 1fr;
+        }
+        .canvas-wrap canvas {
+          max-height: none;
+        }
+        .preview-head h2 {
+          font-size: 14px;
+        }
+      }
+    </style>
+    <style>
+      .brand-logo {
+        width: 66px;
+        height: 66px;
+        object-fit: contain;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img
+          class="brand-logo"
+          src="logo.png"
+          alt="Logo MAS Darunnajah Timampu"
+        />
+        <div>
+          <h1>MATAMUDA<span> 2026</span></h1>
+          <p>MAS Darunnajah Timampu</p>
+        </div>
+      </div>
+    </header>
+    <main class="layout">
+      <section class="card left-card">
+        <h2 class="section-title">1. UPLOAD FOTO</h2>
+        <label class="dropzone" id="dropzone" for="photo"
+          ><div>
+            <div class="upload-icon">♧</div>
+            <strong>Klik untuk upload foto</strong
+            ><span>atau drag &amp; drop di sini</span
+            ><button class="btn choose" id="chooseFile" type="button">
+              Pilih File</button
+            ><small>Format: JPG, PNG (Maks. 10MB)</small>
+          </div></label
+        ><input
+          id="photo"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        />
+        <div class="rule"></div>
+        <h2 class="section-title">2. ATUR FOTO</h2>
+        <div class="control-label"><span>Zoom</span></div>
+        <div class="slider-row">
+          <div class="round-icon">⊖</div>
+          <input
+            class="range"
+            id="zoom"
+            type="range"
+            min="0.5"
+            max="3"
+            step="0.01"
+            value="1"
+          />
+          <div class="value" id="zoomValue">100%</div>
+        </div>
+        <div class="control-label"><span>Rotasi</span></div>
+        <div class="slider-row">
+          <div class="round-icon">⟳</div>
+          <input
+            class="range"
+            id="rotate"
+            type="range"
+            min="-180"
+            max="180"
+            step="1"
+            value="0"
+          />
+          <div class="value" id="rotateValue">0°</div>
+        </div>
+        <button class="reset" id="resetPosition">⟳ &nbsp; Reset Posisi</button>
+        <div class="tips">
+          <div style="font-size: 25px">♧</div>
+          <div>
+            <b>Tips:</b>Geser foto di area preview untuk mengatur posisinya.
+          </div>
+        </div>
+      </section>
+      <section class="card preview-card">
+        <div class="preview-head"><h2>PREVIEW TWIBBON</h2></div>
+        <div class="canvas-wrap">
+          <canvas
+            id="canvas"
+            width="1080"
+            height="1368"
+            aria-label="Preview twibbon"
+          ></canvas>
+        </div>
+        <div class="preview-bottom">
+          <button class="btn download" id="download" disabled>
+            Unduh Hasil</button
+          ><span id="zoomBottom" hidden></span
+          ><span hidden
+            ><button id="zoomIn"></button><button id="zoomOut"></button
+            ><button id="fit"></button
+          ></span>
+        </div>
+      </section>
+      <aside class="right-col">
+        <section class="card right-card">
+          <h2 class="section-title">AKSI CEPAT</h2>
+          <div class="quick-grid">
+            <button class="quick" id="quickIn"><span>⊕</span>Zoom In</button
+            ><button class="quick" id="quickOut"><span>⊖</span>Zoom Out</button
+            ><button class="quick" id="turnLeft">
+              <span>⟲</span>Putar Kiri</button
+            ><button class="quick" id="turnRight">
+              <span>⟳</span>Putar Kanan</button
+            ><button class="quick wide" id="resetAll">
+              <span>⟳</span>Reset Semua
+            </button>
+          </div>
+        </section>
+        <section class="card right-card">
+          <h2 class="section-title">INFORMASI EKSPOR</h2>
+          <div class="rule" style="margin: 0 0 14px"></div>
+          <div class="export-item">
+            <div class="export-icon">▱</div>
+            <div>Format<b>PNG</b></div>
+          </div>
+          <div class="export-item">
+            <div class="export-icon">⛶</div>
+            <div>Ukuran Canvas<b>1080 × 1368 px</b></div>
+          </div>
+          <div class="export-item">
+            <div class="export-icon">✦</div>
+            <div>Kualitas<b>Tinggi</b></div>
+          </div>
+          <div class="export-item">
+            <div class="export-icon">▣</div>
+            <div>Ukuran File<b id="fileSize">—</b></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+    <script>
+      const W = 1080,
+        H = 1368,
+        canvas = document.querySelector("#canvas"),
+        ctx = canvas.getContext("2d"),
+        photoInput = document.querySelector("#photo"),
+        zoom = document.querySelector("#zoom"),
+        rotate = document.querySelector("#rotate"),
+        downloadTop = document.querySelector("#download"),
+        dropzone = document.querySelector("#dropzone"),
+        chooseFile = document.querySelector("#chooseFile"),
+        photo = new Image(),
+        frame = new Image();
+      let hasPhoto = false,
+        x = W / 2,
+        y = H / 2,
+        dragging = false,
+        last;
+      function updateRange(input) {
+        const percent =
+          ((input.value - input.min) / (input.max - input.min)) * 100;
+        input.style.setProperty("--value", percent + "%");
+      }
+      function updateUI() {
+        updateRange(zoom);
+        updateRange(rotate);
+        document.querySelector("#zoomValue").textContent =
+          Math.round(zoom.value * 100) + "%";
+        document.querySelector("#zoomBottom").textContent =
+          Math.round(zoom.value * 100) + "%⌄";
+        document.querySelector("#rotateValue").textContent = rotate.value + "°";
+      }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        if (hasPhoto) {
+          const scale =
+            Math.max(W / photo.naturalWidth, H / photo.naturalHeight) *
+            +zoom.value;
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate((+rotate.value * Math.PI) / 180);
+          ctx.drawImage(
+            photo,
+            (-photo.naturalWidth * scale) / 2,
+            (-photo.naturalHeight * scale) / 2,
+            photo.naturalWidth * scale,
+            photo.naturalHeight * scale,
+          );
+          ctx.restore();
+        }
+        ctx.drawImage(frame, 0, 0, W, H);
+        if (!hasPhoto) {
+          ctx.fillStyle = "rgba(255,255,255,.8)";
+          ctx.fillRect(220, H / 2 - 52, 640, 104);
+          ctx.fillStyle = "#52636e";
+          ctx.font = "26px system-ui";
+          ctx.textAlign = "center";
+          ctx.fillText("Geser & atur foto di sini", W / 2, H / 2 + 10);
+        }
+      }
+      function load(file) {
+        if (!file || !file.type.startsWith("image/")) return;
+        if (file.size > 10 * 1024 * 1024) {
+          alert("Ukuran foto maksimal 10MB.");
+          return;
+        }
+        const url = URL.createObjectURL(file);
+        photo.onload = () => {
+          URL.revokeObjectURL(url);
+          hasPhoto = true;
+          x = W / 2;
+          y = H / 2;
+          downloadTop.disabled = false;
+          document.querySelector("#fileSize").textContent =
+            (file.size / 1024 / 1024).toFixed(1) + " MB";
+          draw();
+        };
+        photo.src = url;
+      }
+      function reset(all = false) {
+        x = W / 2;
+        y = H / 2;
+        if (all) {
+          zoom.value = 1;
+          rotate.value = 0;
+        }
+        updateUI();
+        draw();
+      }
+      function nudgeZoom(amount) {
+        zoom.value = Math.min(
+          +zoom.max,
+          Math.max(+zoom.min, +zoom.value + amount),
+        );
+        updateUI();
+        draw();
+      }
+      function nudgeRotate(amount) {
+        rotate.value = Math.min(
+          +rotate.max,
+          Math.max(+rotate.min, +rotate.value + amount),
+        );
+        updateUI();
+        draw();
+      }
+      chooseFile.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        photoInput.click();
+      };
+      photoInput.onchange = (e) => load(e.target.files[0]);
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("drag");
+      });
+      dropzone.addEventListener("dragleave", () =>
+        dropzone.classList.remove("drag"),
+      );
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("drag");
+        load(e.dataTransfer.files[0]);
+      });
+      zoom.oninput = () => {
+        updateUI();
+        draw();
+      };
+      rotate.oninput = () => {
+        updateUI();
+        draw();
+      };
+      document.querySelector("#zoomIn").onclick = document.querySelector(
+        "#quickIn",
+      ).onclick = () => nudgeZoom(0.1);
+      document.querySelector("#zoomOut").onclick = document.querySelector(
+        "#quickOut",
+      ).onclick = () => nudgeZoom(-0.1);
+      document.querySelector("#turnLeft").onclick = () => nudgeRotate(-15);
+      document.querySelector("#turnRight").onclick = () => nudgeRotate(15);
+      document.querySelector("#resetPosition").onclick = () => reset();
+      document.querySelector("#resetAll").onclick = () => reset(true);
+      document.querySelector("#fit").onclick = () => reset(true);
+      function point(e) {
+        const r = canvas.getBoundingClientRect();
+        return {
+          x: ((e.clientX - r.left) * W) / r.width,
+          y: ((e.clientY - r.top) * H) / r.height,
+        };
+      }
+      canvas.addEventListener("pointerdown", (e) => {
+        if (!hasPhoto) return;
+        dragging = true;
+        last = point(e);
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const p = point(e);
+        x += p.x - last.x;
+        y += p.y - last.y;
+        last = p;
+        draw();
+      });
+      canvas.addEventListener("pointerup", () => (dragging = false));
+      canvas.addEventListener("pointercancel", () => (dragging = false));
+      frame.onload = () => {
+        updateUI();
+        draw();
+      };
+      frame.src = "Twibon.png";
+      downloadTop.onclick = () => {
+        const a = document.createElement("a");
+        a.download = "twibbon.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      };
+    </script>
+  </body>
+</html>
