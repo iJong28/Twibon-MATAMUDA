@@ -90,7 +90,7 @@
       .btn {
         border: 0;
         border-radius: 9px;
-        padding: 14px 20px;
+        padding: 11px 16px;
         font: 700 15px inherit;
         cursor: pointer;
         transition: 0.2s;
@@ -137,7 +137,7 @@
         margin: 29px 0;
       }
       .dropzone {
-        min-height: 263px;
+        min-height: 230px;
         display: grid;
         place-items: center;
         text-align: center;
@@ -169,8 +169,7 @@
         margin-top: 5px;
       }
       .choose {
-        margin-top: 22px;
-        padding: 12px 23px;
+        margin-top: 18px;
         color: #fff;
         background: #099247;
       }
@@ -310,6 +309,12 @@
         background: var(--green);
         font-family: Poppins, ui-sans-serif, sans-serif;
         font-weight: 700;
+      }
+      .photo-controls {
+        padding-top: 21px;
+      }
+      .photo-controls .rule {
+        margin: 0 0 19px;
       }
       .bottom-zoom {
         display: flex;
@@ -483,13 +488,68 @@
         }
         .left-card,
         .preview-card {
-          padding: 19px;
+          padding: 16px;
+        }
+        .left-card {
+          margin-bottom: 15px;
+        }
+        .dropzone {
+          min-height: 190px;
+          padding: 14px;
+        }
+        .upload-icon {
+          font-size: 38px;
+        }
+        .dropzone strong {
+          margin-top: 9px;
+          font-size: 14px;
+        }
+        .dropzone small {
+          margin-top: 11px;
+        }
+        .choose {
+          margin-top: 13px;
+        }
+        .photo-controls {
+          padding-top: 16px;
+        }
+        .photo-controls .rule {
+          margin-bottom: 14px;
+        }
+        .control-label {
+          margin: 17px 0 8px;
+        }
+        .slider-row {
+          grid-template-columns: 25px 1fr 40px;
+          gap: 8px;
+        }
+        .round-icon {
+          font-size: 21px;
+        }
+        .reset {
+          margin-top: 18px;
+          padding: 11px;
+        }
+        .tips {
+          margin-top: 10px;
+          padding: 12px;
+          font-size: 12px;
+        }
+        .preview-bottom {
+          padding-top: 16px;
+        }
+        .preview-bottom .download {
+          min-height: 44px;
+          padding: 10px 14px;
         }
         .right-col {
           display: block;
         }
         .right-card {
           margin-bottom: 15px;
+        }
+        .right-card:first-child {
+          display: none;
         }
         .assurance {
           margin: 0 15px 15px;
@@ -545,43 +605,6 @@
           accept="image/jpeg,image/png,image/webp"
           hidden
         />
-        <div class="rule"></div>
-        <h2 class="section-title">2. ATUR FOTO</h2>
-        <div class="control-label"><span>Zoom</span></div>
-        <div class="slider-row">
-          <div class="round-icon">⊖</div>
-          <input
-            class="range"
-            id="zoom"
-            type="range"
-            min="0.5"
-            max="3"
-            step="0.01"
-            value="1"
-          />
-          <div class="value" id="zoomValue">100%</div>
-        </div>
-        <div class="control-label"><span>Rotasi</span></div>
-        <div class="slider-row">
-          <div class="round-icon">⟳</div>
-          <input
-            class="range"
-            id="rotate"
-            type="range"
-            min="-180"
-            max="180"
-            step="1"
-            value="0"
-          />
-          <div class="value" id="rotateValue">0°</div>
-        </div>
-        <button class="reset" id="resetPosition">⟳ &nbsp; Reset Posisi</button>
-        <div class="tips">
-          <div style="font-size: 25px">♧</div>
-          <div>
-            <b>Tips:</b>Geser foto di area preview untuk mengatur posisinya.
-          </div>
-        </div>
       </section>
       <section class="card preview-card">
         <div class="preview-head"><h2>PREVIEW TWIBBON</h2></div>
@@ -592,6 +615,47 @@
             height="1368"
             aria-label="Preview twibbon"
           ></canvas>
+        </div>
+        <div class="photo-controls">
+          <div class="rule"></div>
+          <h2 class="section-title">2. ATUR FOTO</h2>
+          <div class="control-label"><span>Zoom</span></div>
+          <div class="slider-row">
+            <div class="round-icon">⊖</div>
+            <input
+              class="range"
+              id="zoom"
+              type="range"
+              min="0.5"
+              max="3"
+              step="0.01"
+              value="1"
+            />
+            <div class="value" id="zoomValue">100%</div>
+          </div>
+          <div class="control-label"><span>Rotasi</span></div>
+          <div class="slider-row">
+            <div class="round-icon">⟳</div>
+            <input
+              class="range"
+              id="rotate"
+              type="range"
+              min="-180"
+              max="180"
+              step="1"
+              value="0"
+            />
+            <div class="value" id="rotateValue">0°</div>
+          </div>
+          <button class="reset" id="resetPosition">
+            ⟳ &nbsp; Reset Posisi
+          </button>
+          <div class="tips">
+            <div style="font-size: 25px">♧</div>
+            <div>
+              <b>Tips:</b>Geser foto di area preview untuk mengatur posisinya.
+            </div>
+          </div>
         </div>
         <div class="preview-bottom">
           <button class="btn download" id="download" disabled>
